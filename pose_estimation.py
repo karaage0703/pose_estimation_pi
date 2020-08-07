@@ -162,7 +162,7 @@ if __name__ == '__main__':
         from picamera.array import PiRGBArray
         from picamera import PiCamera
         cam = PiCamera()
-        cam.resolution = (camera_width, camera_height)
+        cam.resolution = (width, height)
         stream = PiRGBArray(cam)
         window_name = "Raspi Camera"
     else:
@@ -198,9 +198,17 @@ if __name__ == '__main__':
         while True:
             t1 = time.perf_counter()
 
-            ret, color_image = cam.read()
-            if not ret:
-                break
+            # ret, color_image = cam.read()
+            # if not ret:
+                # break
+            if camera_type == 'raspi_cam':
+                cam.capture(stream, 'bgr', use_video_port=True)
+                color_image = stream.array
+                stream.truncate(0)
+            else:
+                ret, color_image = cam.read()
+                if not ret:
+                    continue
 
             colw = color_image.shape[1]
             colh = color_image.shape[0]
