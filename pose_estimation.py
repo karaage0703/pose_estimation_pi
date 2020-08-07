@@ -121,11 +121,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="mobilenet_v2_pose_256_256_dm100_integer_quant.tflite", help="Path of the detection model.")
     parser.add_argument("--usbcamno", type=int, default=0, help="USB Camera number.")
-    parser.add_argument("--camera_type", default="usb_cam", help="set usb_cam or raspi_cam")
+    parser.add_argument("--camera_type", default="usb_cam", help="set usb_cam or raspi_cam or video_file")
     parser.add_argument("--camera_width", type=int, default=640, help="width.")
     parser.add_argument("--camera_height", type=int, default=480, help="height.")
     parser.add_argument("--vidfps", type=int, default=150, help="Frame rate.")
     parser.add_argument("--num_threads", type=int, default=4, help="Threads.")
+    parser.add_argument("--input_video_file", default='', help="Input video file")
     args = parser.parse_args()
 
     model = args.model
@@ -152,25 +153,31 @@ if __name__ == '__main__':
             [255,200,100], [255,0,255], [0,0,255], [255,0,0], [200,200,0],
             [255,0,0], [200,200,0], [0,0,0]]
 
+    if args.input_video_file != "":
+        # WORKAROUND
+        print("[Info] --input_video_file has an argument. so --device was replaced to 'video_file'.")
+        camera_type = "video_file"
+
     if camera_type == "usb_cam":
         cam = cv2.VideoCapture(usbcamno)
         cam.set(cv2.CAP_PROP_FPS, vidfps)
         cam.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         cam.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-        window_name = "USB Camera"
     elif camera_type == "raspi_cam":
         from picamera.array import PiRGBArray
         from picamera import PiCamera
         cam = PiCamera()
         cam.resolution = (width, height)
         stream = PiRGBArray(cam)
-        window_name = "Raspi Camera"
+    elif camera_type == "video_file":
+        cam = cv2.VideoCapture(args.input_video_file)
+
     else:
         print('[Error] --camera_type: wrong device')
         parser.print_help()
         sys.exit()
 
-    cv2.namedWindow(window_name, cv2.WINDOW_AUTOSIZE)
+    cv2.namedWindow('pose estimation pi', cv2.WINDOW_AUTOSIZE)
 
     interpreter = Interpreter(model_path=model)
     interpreter.allocate_tensors()
@@ -198,15 +205,13 @@ if __name__ == '__main__':
         while True:
             t1 = time.perf_counter()
 
-            # ret, color_image = cam.read()
-            # if not ret:
-                # break
             if camera_type == 'raspi_cam':
                 cam.capture(stream, 'bgr', use_video_port=True)
                 color_image = stream.array
                 stream.truncate(0)
             else:
                 ret, color_image = cam.read()
+                # color_image = color_image[30:510, 160:800] # resize
                 if not ret:
                     continue
 
@@ -262,9 +267,10 @@ if __name__ == '__main__':
 
             cv2.putText(frameClone, fps, (w-170,15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (38,0,255), 1, cv2.LINE_AA)
             frameClone = cv2.resize(frameClone, (colw, colw))
-            cv2.imshow("USB Camera" , frameClone)
+            cv2.imshow("pose estimation pi" , frameClone)
 
-            if cv2.waitKey(1)&0xFF == ord('q'):
+            key = cv2.waitKey(1)
+            if key == 27 or key == ord('q'): # when ESC key or q key is pressed break
                 break
 
             # FPS calculation
