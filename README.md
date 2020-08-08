@@ -1,7 +1,7 @@
 # pose_estimation_pi
 Fast Pose estimation on Raspberry Pi
 
-This repository program and deep learning model file are based on PINTO_model_zoo(https://github.com/PINTO0309/PINTO_model_zoo).
+This repository program and deep learning model file are based on [PINTO_model_zoo](https://github.com/PINTO0309/PINTO_model_zoo).
 
 
 # Setup
