@@ -24,7 +24,7 @@ $ ./setup-tensorflow-raspbian-buster.sh
 Execute following command:
 
 ```sh
-$ cd && https://github.com/karaage0703/pose_estimation_pi
+$ cd && git clone https://github.com/karaage0703/pose_estimation_pi
 ```
 
 # Usage
