@@ -33,7 +33,7 @@ Execute following commands:
 
 ```sh
 $ cd ~/pose_estimation_pi
-$ python3 pose_estimation.py --camera_type=’raspi_cam’
+$ python3 pose_estimation.py --camera_type=raspi_cam
 ```
 
 ## Pose estimation with web camera
@@ -49,7 +49,7 @@ Execute following commands:
 
 ```sh
 $ cd ~/pose_estimation_pi
-$ python3 pose_estimation.py --camera_type=’usb_cam’
+$ python3 pose_estimation.py --camera_type=usb_cam
 ```
 
 # License
