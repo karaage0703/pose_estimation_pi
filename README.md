@@ -60,4 +60,4 @@ This software is released under MIT License, see LICENSE.
 - [@karaage0703](http://github.com/karaage0703)
 
 # References
-- https://github.com/PINTO0309/PINTO_model_zoo/tree/master/07_mobilenetv2-poseestimation/dm100_224
+- https://github.com/PINTO0309/PINTO_model_zoo/tree/main/007_mobilenetv2-poseestimation/dm100_224
