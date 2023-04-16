@@ -41,7 +41,7 @@ Execute following commands:
 
 ```sh
 $ cd ~/pose_estimation_pi
-$ python3 pose_estimation.py --input_video_file=<video file name>
+$ python3 pose_estimation.py --camera_type=usb_cam
 ```
 
 ## Pose estimation with video file
@@ -49,7 +49,7 @@ Execute following commands:
 
 ```sh
 $ cd ~/pose_estimation_pi
-$ python3 pose_estimation.py --camera_type=usb_cam
+$ python3 pose_estimation.py --input_video_file=<video file name>
 ```
 
 # License
